@@ -12,22 +12,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8"));
 
 const HELP = `
-  ${bold("create-claude-plugin")} — Scaffold a Claude Code plugin
+  ${bold("create-claude-plugin")} ${dim("—")} ${dim("Scaffold a Claude Code plugin")}
 
   ${bold("Usage")}
-    $ create-claude-plugin <plugin-name> [options]
-    $ npx create-claude-plugin <plugin-name> [options]
+    ${dim("$")} ${cyan("create-claude-plugin")} ${green("<plugin-name>")} ${dim("[options]")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("<plugin-name>")} ${dim("[options]")}
 
   ${bold("Options")}
-    -y, --yes       Skip prompts and use defaults
-        --no-git    Skip git init
-    -v, --version   Show version number
-    -h, --help      Show this help message
+    ${cyan("-y")}, ${cyan("--yes")}       Skip prompts and use defaults
+        ${cyan("--no-git")}    Skip git init
+    ${cyan("-v")}, ${cyan("--version")}   Show version number
+    ${cyan("-h")}, ${cyan("--help")}      Show this help message
 
   ${bold("Examples")}
-    $ npx create-claude-plugin my-plugin
-    $ npx create-claude-plugin my-plugin --yes
-    $ npx create-claude-plugin my-plugin --yes --no-git
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")} ${cyan("--yes")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")} ${cyan("--yes --no-git")}
 `;
 
 const NAME_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
