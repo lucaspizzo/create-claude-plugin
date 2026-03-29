@@ -1,0 +1,7 @@
+test/
+.github/
+.editorconfig
+.releaserc.json
+biome.json
+CHANGELOG.md
+.DS_Store
