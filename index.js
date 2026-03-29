@@ -81,24 +81,32 @@ function checkNodeVersion() {
   }
 }
 
+function hasGitUser() {
+  try {
+    execFileSync("git", ["config", "user.name"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function gitInit(dir) {
   const opts = { cwd: dir, stdio: "ignore" };
   try {
     execFileSync("git", ["init"], opts);
     execFileSync("git", ["add", "-A"], opts);
-    execFileSync(
-      "git",
-      [
-        "-c",
-        "user.name=create-claude-plugin",
-        "-c",
-        "user.email=noreply",
-        "commit",
-        "-m",
-        "Initial commit from create-claude-plugin",
-      ],
-      opts,
-    );
+    const commitArgs = hasGitUser()
+      ? ["commit", "-m", "Initial commit from create-claude-plugin"]
+      : [
+          "-c",
+          "user.name=create-claude-plugin",
+          "-c",
+          "user.email=noreply",
+          "commit",
+          "-m",
+          "Initial commit from create-claude-plugin",
+        ];
+    execFileSync("git", commitArgs, opts);
     return true;
   } catch {
     return false;
