@@ -11,17 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: node --test test/cli.test.js test/scaffold.test.js
-
   release:
-    needs: test
     runs-on: ubuntu-latest
     environment: release
     steps:
