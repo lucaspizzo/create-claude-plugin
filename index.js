@@ -85,10 +85,10 @@ function gitInit(dir) {
   try {
     execSync("git init", { cwd: dir, stdio: "ignore" });
     execSync("git add -A", { cwd: dir, stdio: "ignore" });
-    execSync('git commit -m "Initial commit from create-claude-plugin"', {
-      cwd: dir,
-      stdio: "ignore",
-    });
+    execSync(
+      'git -c user.name="create-claude-plugin" -c user.email="noreply" commit -m "Initial commit from create-claude-plugin"',
+      { cwd: dir, stdio: "ignore" },
+    );
     return true;
   } catch {
     return false;
