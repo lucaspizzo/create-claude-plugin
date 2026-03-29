@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, posix, sep } from "node:path";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { scaffold } from "../lib/scaffold.js";
+
+function toPosix(filePath) {
+  return filePath.split(sep).join(posix.sep);
+}
 
 describe("scaffold", () => {
   let tempDir;
@@ -243,9 +247,10 @@ describe("scaffold", () => {
       components: ["Skills"],
     });
 
+    const normalized = files.map(toPosix);
     assert.ok(Array.isArray(files));
-    assert.ok(files.includes(".claude-plugin/plugin.json"));
-    assert.ok(files.includes("skills/hello/SKILL.md"));
+    assert.ok(normalized.includes(".claude-plugin/plugin.json"));
+    assert.ok(normalized.includes("skills/hello/SKILL.md"));
     assert.ok(!files.some((f) => f.startsWith("/")));
   });
 
@@ -267,8 +272,10 @@ describe("scaffold", () => {
       components: ["Skills", "Agents"],
     });
 
-    assert.ok(files1.length < files2.length);
-    assert.ok(!files1.includes("agents/example.md"));
-    assert.ok(files2.includes("agents/example.md"));
+    const norm1 = files1.map(toPosix);
+    const norm2 = files2.map(toPosix);
+    assert.ok(norm1.length < norm2.length);
+    assert.ok(!norm1.includes("agents/example.md"));
+    assert.ok(norm2.includes("agents/example.md"));
   });
 });
