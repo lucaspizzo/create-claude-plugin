@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, it } from "node:test";
 
-const CLI = join(import.meta.dirname, "..", "index.js");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const CLI = join(__dirname, "..", "index.js");
 let tempDir;
 
 function run(args, opts = {}) {
