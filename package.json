@@ -21,7 +21,7 @@
     "lib/"
   ],
   "scripts": {
-    "test": "node --test test/*.test.js",
+    "test": "node --test test/cli.test.js test/scaffold.test.js",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "release": "semantic-release"

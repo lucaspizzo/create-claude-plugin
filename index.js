@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,22 +12,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8"));
 
 const HELP = `
-  ${bold("create-claude-plugin")} — Scaffold a Claude Code plugin
+  ${bold("create-claude-plugin")} ${dim("—")} ${dim("Scaffold a Claude Code plugin")}
 
   ${bold("Usage")}
-    $ create-claude-plugin <plugin-name> [options]
-    $ npx create-claude-plugin <plugin-name> [options]
+    ${dim("$")} ${cyan("create-claude-plugin")} ${green("<plugin-name>")} ${dim("[options]")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("<plugin-name>")} ${dim("[options]")}
 
   ${bold("Options")}
-    -y, --yes       Skip prompts and use defaults
-        --no-git    Skip git init
-    -v, --version   Show version number
-    -h, --help      Show this help message
+    ${cyan("-y")}, ${cyan("--yes")}       Skip prompts and use defaults
+        ${cyan("--no-git")}    Skip git init
+    ${cyan("-v")}, ${cyan("--version")}   Show version number
+    ${cyan("-h")}, ${cyan("--help")}      Show this help message
 
   ${bold("Examples")}
-    $ npx create-claude-plugin my-plugin
-    $ npx create-claude-plugin my-plugin --yes
-    $ npx create-claude-plugin my-plugin --yes --no-git
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")} ${cyan("--yes")}
+    ${dim("$")} ${cyan("npx create-claude-plugin")} ${green("my-plugin")} ${cyan("--yes --no-git")}
 `;
 
 const NAME_PATTERN = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
@@ -81,14 +81,32 @@ function checkNodeVersion() {
   }
 }
 
-function gitInit(dir) {
+function hasGitUser() {
   try {
-    execSync("git init", { cwd: dir, stdio: "ignore" });
-    execSync("git add -A", { cwd: dir, stdio: "ignore" });
-    execSync('git commit -m "Initial commit from create-claude-plugin"', {
-      cwd: dir,
-      stdio: "ignore",
-    });
+    execFileSync("git", ["config", "user.name"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function gitInit(dir) {
+  const opts = { cwd: dir, stdio: "ignore" };
+  try {
+    execFileSync("git", ["init"], opts);
+    execFileSync("git", ["add", "-A"], opts);
+    const commitArgs = hasGitUser()
+      ? ["commit", "-m", "Initial commit from create-claude-plugin"]
+      : [
+          "-c",
+          "user.name=create-claude-plugin",
+          "-c",
+          "user.email=noreply",
+          "commit",
+          "-m",
+          "Initial commit from create-claude-plugin",
+        ];
+    execFileSync("git", commitArgs, opts);
     return true;
   } catch {
     return false;
