@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -82,12 +82,22 @@ function checkNodeVersion() {
 }
 
 function gitInit(dir) {
+  const opts = { cwd: dir, stdio: "ignore" };
   try {
-    execSync("git init", { cwd: dir, stdio: "ignore" });
-    execSync("git add -A", { cwd: dir, stdio: "ignore" });
-    execSync(
-      'git -c user.name="create-claude-plugin" -c user.email="noreply" commit -m "Initial commit from create-claude-plugin"',
-      { cwd: dir, stdio: "ignore" },
+    execFileSync("git", ["init"], opts);
+    execFileSync("git", ["add", "-A"], opts);
+    execFileSync(
+      "git",
+      [
+        "-c",
+        "user.name=create-claude-plugin",
+        "-c",
+        "user.email=noreply",
+        "commit",
+        "-m",
+        "Initial commit from create-claude-plugin",
+      ],
+      opts,
     );
     return true;
   } catch {
