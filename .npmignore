@@ -1,7 +1,11 @@
 test/
 .github/
+.claude/
 .editorconfig
 .releaserc.json
 biome.json
 CHANGELOG.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+SECURITY.md
 .DS_Store
